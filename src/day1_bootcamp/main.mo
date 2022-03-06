@@ -1,4 +1,5 @@
 import Array "mo:base/Array";
+import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 
 actor {
@@ -90,7 +91,24 @@ actor {
 
     // Challenge 10 :
 
-    public func selection_sort(array : [Nat]) : async [Nat] {
-      return Array.sort(array, Nat.compare);
+    public func selection_sort(arr : [Nat]) : async [Nat] {
+
+      var tmpArr : [var Nat] = Array.thaw(arr);
+      var length = tmpArr.size();
+      var temp = 0;
+      for (i in Iter.range(0, length - 1)) {
+        var min_idx = i;
+        for(j in Iter.range( i + 1, length)) {
+          if(tmpArr[j] < tmpArr[min_idx]) {
+            min_idx := j;
+          };
+        };
+        // swap
+        temp := tmpArr[min_idx];
+        tmpArr[min_idx] := tmpArr[i];
+        tmpArr[i] := temp;
+      };
+
+      return Array.freeze(tmpArr);
     };
 };
